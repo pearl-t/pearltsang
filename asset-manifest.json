@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/www.pearltsang.com/static/css/main.f87db60f.css",
+    "main.js": "/www.pearltsang.com/static/js/main.336c9ab3.js",
+    "static/js/496.0320d045.chunk.js": "/www.pearltsang.com/static/js/496.0320d045.chunk.js",
+    "index.html": "/www.pearltsang.com/index.html",
+    "main.f87db60f.css.map": "/www.pearltsang.com/static/css/main.f87db60f.css.map",
+    "main.336c9ab3.js.map": "/www.pearltsang.com/static/js/main.336c9ab3.js.map",
+    "496.0320d045.chunk.js.map": "/www.pearltsang.com/static/js/496.0320d045.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f87db60f.css",
+    "static/js/main.336c9ab3.js"
+  ]
+}
