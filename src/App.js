@@ -1,16 +1,22 @@
 import './App.css';
+import Navbar from './components/Navbar';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import About from "./components/About";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="loading.svg" className="App-logo" alt="logo" />
-        <h1 className="text-3xl mt-3 font-bold">
-         This site is a big old WIP.
-        </h1>
-      </header>
-    </div>
-  );
+    <>
+      <div className="grid grid-cols-12">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </div>      
+    </>
+  )
 }
 
 export default App;
