@@ -7,8 +7,12 @@
   pointer-events: none;
 }
 
-.App-header {
+body {
   background-color: #dbdabc;
+  font-family: 'Fira Mono', sans-serif;  
+}
+.App {
+  /* background-color: #dbdabc; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;

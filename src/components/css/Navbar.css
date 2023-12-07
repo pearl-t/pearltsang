@@ -1,0 +1,49 @@
+.navbar{
+    background-color: #B7C3A1;
+    height: 100vh;
+}
+
+
+.box {
+  background-image: "image.png";
+      /* --mask:
+        radial-gradient(214.66px at calc(100% - 288.00px) 50%,#000 99%,#0000 101%) 0 calc(50% - 192px)/100% 384px,
+        radial-gradient(214.66px at calc(100% + 192.00px) 50%,#0000 99%,#000 101%) calc(100% - 96px) 50%/100% 384px repeat-y;
+      -webkit-mask: var(--mask);
+              mask: var(--mask); */
+    /* Copy the CSS */
+    /* By Temani Afif?twitter iconBuy Me A Coffee */
+  }
+
+.me-icon{
+  max-height:250px;
+  border-radius: 50%;
+  padding:10px;
+}
+.nav-link{
+  color:aqua;
+}
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+  color: #0087ca;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 120%;
+  transform: scaleX(0);
+  height: 50%;
+  bottom: 0;
+  left: -3px;
+  background-color: #0087ca;
+  transform-origin: bottom right;
+  transition: transform 0.4s ease-out;
+  opacity: .2;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
