@@ -5,9 +5,10 @@ const Home = () => {
     <>
     <div className="col-span-8 App">
     <img src="loading.svg" className="App-logo" alt="logo" />
-        <h1 className="text-3xl mt-3 font-bold">
+        <h1 className="text-3xl mt-3 font-bold" style={{ fontFamily: 'TheSeasonsBD' }}>
+          
          This site is a big old WIP
-        </h1>
+        </h1>       
     </div>
     </>        
   );

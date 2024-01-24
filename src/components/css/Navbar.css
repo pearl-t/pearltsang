@@ -1,5 +1,5 @@
 .navbar{
-    background-color: #B7C3A1;
+    /* background-color: #B7C3A1; */
     height: 100vh;
 }
 
@@ -16,9 +16,10 @@
   }
 
 .me-icon{
-  max-height:250px;
-  border-radius: 50%;
-  padding:10px;
+  max-height:200px;
+  padding-top: 1rem;
+  border-bottom-left-radius: 200px;
+  border-bottom-right-radius: 200px;
 }
 .nav-link{
   color:aqua;
@@ -26,7 +27,6 @@
 .hover-underline-animation {
   display: inline-block;
   position: relative;
-  color: #0087ca;
 }
 
 .hover-underline-animation::after {
@@ -37,7 +37,7 @@
   height: 50%;
   bottom: 0;
   left: -3px;
-  background-color: #0087ca;
+  background-color: #FEFAE0;
   transform-origin: bottom right;
   transition: transform 0.4s ease-out;
   opacity: .2;
@@ -46,4 +46,25 @@
 .hover-underline-animation:hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
+}
+
+.bottom-nav{
+  background-color:#A4B99E;
+  border-top-left-radius: 200px;
+  border-top-right-radius: 200px; 
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-nav{
+  background-color:#A4B99E;
+  border-bottom-left-radius: 200px;
+  border-bottom-right-radius: 200px; 
+  /* flex-grow:1; */
+  align-items: end;
+  justify-content: center;
+  display: flex;  
+  /* mask: url('https://d3544la1u8djza.cloudfront.net/APHI/Blog/2016/10_October/persians/Persian+Cat+Facts+History+Personality+and+Care+_+ASPCA+Pet+Health+Insurance+_+white+Persian+cat+resting+on+a+brown+sofa-min.jpg'); */
 }
