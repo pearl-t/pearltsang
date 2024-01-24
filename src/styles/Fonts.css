@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+body {
+  font-family: 'Space Mono', monospace;
+}
+
+@font-face {
+    font-family: 'TheSeasonsBD';
+    src: url('../fonts/Barbra-Regular.otf') format('opentype');
+    font-weight: bold;
+  }
+  
