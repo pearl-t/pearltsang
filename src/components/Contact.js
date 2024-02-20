@@ -30,7 +30,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="col-span-8 container">         
+    <div className="container App">         
         <div className="max-w-md mx-auto mt-8">
         {!formSubmitted ? (
             <>

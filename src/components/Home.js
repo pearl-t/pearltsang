@@ -3,7 +3,7 @@ import React from "react";
 const Home = () => {
   return (
     <>
-    <div className="col-span-8 App">
+    <div className="App">
     <img src="loading.svg" className="App-logo" alt="logo" />
         <h1 className="text-3xl mt-3 font-bold" style={{ fontFamily: 'TheSeasonsBD' }}>
           

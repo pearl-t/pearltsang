@@ -1,8 +1,25 @@
 .navbar{
-    /* background-color: #B7C3A1; */
-    height: 100vh;
+    position: sticky;
+    top: 0;
+    
+    @media (max-width: 576px){
+      display:none
+    }      
 }
-
+.mobile-navbar{
+  display: none;
+  background-color:#A4B99E;
+  border-top-left-radius: 200px;
+  border-bottom-left-radius: 200px; 
+  align-items: end;
+  justify-content: center;
+  display: none;  
+  height: 75px;  
+  margin-top:5px;
+  @media (max-width: 576px){
+    display:block;
+  } 
+}
 
 .box {
   background-image: "image.png";
@@ -18,12 +35,10 @@
 .me-icon{
   max-height:200px;
   padding-top: 1rem;
-  border-bottom-left-radius: 200px;
-  border-bottom-right-radius: 200px;
+  border-bottom-left-radius: 175px;
+  border-bottom-right-radius: 175px;
 }
-.nav-link{
-  color:aqua;
-}
+
 .hover-underline-animation {
   display: inline-block;
   position: relative;
@@ -62,9 +77,7 @@
   background-color:#A4B99E;
   border-bottom-left-radius: 200px;
   border-bottom-right-radius: 200px; 
-  /* flex-grow:1; */
   align-items: end;
   justify-content: center;
   display: flex;  
-  /* mask: url('https://d3544la1u8djza.cloudfront.net/APHI/Blog/2016/10_October/persians/Persian+Cat+Facts+History+Personality+and+Care+_+ASPCA+Pet+Health+Insurance+_+white+Persian+cat+resting+on+a+brown+sofa-min.jpg'); */
 }
