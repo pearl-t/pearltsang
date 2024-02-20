@@ -23,7 +23,7 @@ const About = () => {
 
     {/* <img height="500px" src="https://pearltsang.s3.us-east-2.amazonaws.com/bonneville.webp"/>    */}
     {/* <img height="500px" src="https://pearltsang.s3.us-east-2.amazonaws.com/death_valley.webp"/>         */}
-    <AboutPhoto src="https://pearltsang.s3.us-east-2.amazonaws.com/bonneville.webp" text="hehNDNe" location="Bonneville Salt Flats"></AboutPhoto>
+    <AboutPhoto src="https://pearltsang.s3.us-east-2.amazonaws.com/bonneville.webp" text="Test Text" location="Bonneville Salt Flats"></AboutPhoto>
     </div>
     </> 
   );
