@@ -11,11 +11,11 @@ import './styles/Fonts.css';
 function App() {
   return (
     <>
-      <div className="grid grid-cols-12">
+      <div className="grid grid-cols-12 container">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<About />} />         
           <Route path="/contact" element={<Contact />} />          
         </Routes>
       </div>      
