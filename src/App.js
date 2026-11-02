@@ -9,6 +9,7 @@ import photosIcon from './assets/xp-icons/photos.png';
 import Photos from './components/Photos';
 import Resume from './components/Resume';
 import frogAvatar from './assets/xp-frog.png';
+import loginPortrait from './assets/pearl-portrait.jpg';
 import Contact from './components/Contact';
 import Minesweeper from './components/MinesweeperGame';
 import { DIFFICULTIES } from './components/minesweeperLogic';
@@ -50,6 +51,7 @@ const sections = { home: 'Home', about: 'About Me', contact: 'Contact', mineswee
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [autoEnter, setAutoEnter] = useState(true);
   const [resumeUnlocked, setResumeUnlocked] = useState(false);
   const [mineDifficulty, setMineDifficulty] = useState('beginner');
   const [activeWindow, setActiveWindow] = useState('home');
@@ -63,6 +65,12 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (loggedIn || !autoEnter) return;
+    const timer = setTimeout(() => setLoggedIn(true), 10000);
+    return () => clearTimeout(timer);
+  }, [loggedIn, autoEnter]);
+
   function openWindow(section) {
     setActiveWindow(section);
     setMinimized(false);
@@ -70,6 +78,7 @@ function App() {
   }
 
   function logOff() {
+    setAutoEnter(false);
     setLoggedIn(false);
     setStartOpen(false);
     setActiveWindow('home');
@@ -93,7 +102,7 @@ function App() {
           <div className="login-divider" />
           <section className="login-users" aria-label="Choose a profile">
             <button className="profile-button" onClick={() => setLoggedIn(true)} aria-label="Enter Pearl's world">
-              <span className="profile-avatar"><img src={frogAvatar} alt="" /></span>
+              <span className="profile-avatar"><img src={loginPortrait} alt="" /></span>
               <span className="profile-name">Pearl</span>
               <span className="profile-arrow" aria-hidden="true">➜</span>
             </button>

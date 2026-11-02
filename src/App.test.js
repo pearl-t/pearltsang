@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import App from './App';
 
 test('profile opens the desktop and Minesweeper survives minimization', () => {
@@ -20,4 +20,24 @@ test('profile opens the desktop and Minesweeper survives minimization', () => {
   expect(screen.getByLabelText('Mines remaining')).toHaveTextContent('010');
   fireEvent.click(within(board).getAllByRole('button')[40]);
   expect(screen.getByText('Good luck!')).toBeInTheDocument();
+});
+
+
+test('auto-enters after ten seconds but stays on login after logging off', () => {
+  jest.useFakeTimers();
+  try {
+    render(<App />);
+    act(() => jest.advanceTimersByTime(9999));
+    expect(screen.getByRole('button', { name: "Enter Pearl's world" })).toBeInTheDocument();
+    act(() => jest.advanceTimersByTime(1));
+    expect(screen.getByRole('heading', { name: "Hello World, I'm Pearl" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'start' }));
+    fireEvent.click(screen.getByRole('button', { name: /Log Off/ }));
+    act(() => jest.advanceTimersByTime(60000));
+    expect(screen.getByRole('button', { name: "Enter Pearl's world" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: "Enter Pearl's world" }));
+    expect(screen.getByRole('heading', { name: "Hello World, I'm Pearl" })).toBeInTheDocument();
+  } finally {
+    jest.useRealTimers();
+  }
 });
