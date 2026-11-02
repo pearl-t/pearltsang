@@ -39,3 +39,20 @@ test('a mine ends the game and reveals the other mines', () => {
   expect(result.board[5].exploded).toBe(true);
   expect(result.board[15].revealed).toBe(true);
 });
+
+test.each([
+  { rows: 9, columns: 9, mines: 10 },
+  { rows: 16, columns: 16, mines: 40 },
+  { rows: 16, columns: 30, mines: 99 },
+])('supports a $rows × $columns board with $mines mines', config => {
+  const index = Math.floor(config.rows / 2) * config.columns + Math.floor(config.columns / 2);
+  const board = placeMines(emptyBoard(config), index, () => 0.37, config);
+  expect(board).toHaveLength(config.rows * config.columns);
+  expect(board.filter(cell => cell.mine)).toHaveLength(config.mines);
+  expect([index, ...neighbors(index, config)].every(i => !board[i].mine)).toBe(true);
+  expect(neighbors(config.columns - 1, config)).not.toContain(config.columns);
+  expect(reveal(board, index, config).status).not.toBe('lost');
+  board.forEach((cell, i) => {
+    expect(cell.count).toBe(neighbors(i, config).filter(n => board[n].mine).length);
+  });
+});

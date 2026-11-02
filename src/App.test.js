@@ -3,8 +3,8 @@ import App from './App';
 
 test('profile opens the desktop and Minesweeper survives minimization', () => {
   render(<App />);
-  fireEvent.click(screen.getByRole('button', { name: "Enter Pearl's portfolio" }));
-  fireEvent.click(within(screen.getByRole('navigation', { name: 'Portfolio folders' })).getByRole('button', { name: 'Minesweeper' }));
+  fireEvent.click(screen.getByRole('button', { name: "Enter Pearl's world" }));
+  fireEvent.click(within(screen.getByRole('navigation', { name: 'Desktop folders' })).getByRole('button', { name: 'Minesweeper' }));
   const board = screen.getByRole('group', { name: /Minesweeper board/ });
   expect(within(board).getAllByRole('button')).toHaveLength(81);
   const firstCell = within(board).getAllByRole('button')[0];

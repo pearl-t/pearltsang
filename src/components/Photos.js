@@ -6,6 +6,7 @@ import cat04 from '../assets/cats/cat-04.jpg';
 import './Photos.css';
 
 const photos = [cat01, cat02, cat03, cat04];
+const photoNames = ['Cleo 01.jpg', 'Tuna 01.jpg', 'Tuna 02.jpg', 'Cleo 02.jpg'];
 
 export default function Photos() {
   const [selected, setSelected] = useState(0);
@@ -20,7 +21,7 @@ export default function Photos() {
       }
     }}>
       <div className="photo-heading"><h2>My cats</h2><span>My Pictures</span></div>
-      <div className="photo-preview"><img src={photos[selected]} alt={`Pearl’s cats — ${selected + 1} of ${photos.length}`} /></div>
+      <div className="photo-preview"><img src={photos[selected]} alt={photoNames[selected].replace(/ \d+\.jpg$/, '')} /></div>
       <div className="photo-controls">
         <button type="button" onClick={() => move(-1)} aria-label="Previous photo">◀</button>
         <span aria-live="polite">Photo {selected + 1} of {photos.length}</span>
@@ -28,8 +29,8 @@ export default function Photos() {
       </div>
       <div className="photo-filmstrip" aria-label="Choose a cat photo">
         {photos.map((src, index) => (
-          <button type="button" key={src} aria-label={`View cat photo ${index + 1}`} aria-pressed={selected === index} onClick={() => setSelected(index)}>
-            <img src={src} alt="" /><span>Cat {String(index + 1).padStart(2, '0')}.jpg</span>
+          <button type="button" key={src} aria-label={`View ${photoNames[index]}`} aria-pressed={selected === index} onClick={() => setSelected(index)}>
+            <img src={src} alt="" /><span>{photoNames[index]}</span>
           </button>
         ))}
       </div>

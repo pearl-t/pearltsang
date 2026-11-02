@@ -7,9 +7,11 @@ import folderIcon from './assets/xp-icons/folder.png';
 import minesweeperIcon from './assets/xp-icons/minesweeper.png';
 import photosIcon from './assets/xp-icons/photos.png';
 import Photos from './components/Photos';
+import Resume from './components/Resume';
 import frogAvatar from './assets/xp-frog.png';
 import Contact from './components/Contact';
 import Minesweeper from './components/MinesweeperGame';
+import { DIFFICULTIES } from './components/minesweeperLogic';
 import MyspaceProfile from './components/MyspaceProfile';
 
 function WindowsMark({ className = '' }) {
@@ -34,6 +36,7 @@ function WindowsMark({ className = '' }) {
 const desktopIconImages = { computer: computerIcon, internet: internetIcon, contact: contactIcon, folder: folderIcon, minesweeper: minesweeperIcon, photos: photosIcon };
 
 function DesktopIcon({ kind = 'folder' }) {
+  if (kind === 'resume') return <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 3h24l7 8v33H12z" fill="#fff" stroke="#7b8b83" /><path d="M36 3v9h7" fill="#dce8df" stroke="#7b8b83" /><path d="M18 17h20v20H18zM18 23h20M18 30h20M25 17v20M32 17v20" fill="none" stroke="#539465" /><path d="M3 11l23-4v36L3 39z" fill="#257441" stroke="#164e2a" /><path d="M8 19h4l3 5 3-5h4l-5 8 5 9h-4l-3-6-3 6H8l5-9z" fill="white" /></svg>;
   return (
     <svg viewBox="0 0 48 48" aria-hidden="true">
       <image href={desktopIconImages[kind] || folderIcon} width="48" height="48" />
@@ -41,12 +44,14 @@ function DesktopIcon({ kind = 'folder' }) {
   );
 }
 
-const iconKinds = { home: 'computer', about: 'internet', contact: 'contact', minesweeper: 'minesweeper', photos: 'photos' };
+const iconKinds = { home: 'computer', about: 'internet', contact: 'contact', minesweeper: 'minesweeper', photos: 'photos', resume: 'resume' };
 
-const sections = { home: 'Home', about: 'About Me', contact: 'Contact', minesweeper: 'Minesweeper', photos: 'Photos' };
+const sections = { home: 'Home', about: 'About Me', contact: 'Contact', minesweeper: 'Minesweeper', photos: 'Photos', resume: 'Resume.xls' };
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [resumeUnlocked, setResumeUnlocked] = useState(false);
+  const [mineDifficulty, setMineDifficulty] = useState('beginner');
   const [activeWindow, setActiveWindow] = useState('home');
   const [minimized, setMinimized] = useState(false);
   const [maximized, setMaximized] = useState(false);
@@ -77,7 +82,7 @@ function App() {
       <div className="login-top" />
       <div className="login-body">
         <div className="login-content">
-          <section className="login-brand" aria-label="Windows XP inspired portfolio">
+          <section className="login-brand" aria-label="Windows XP inspired personal website">
             <div className="xp-wordmark">
               <WindowsMark className="login-windows-mark" />
               <span className="microsoft">Microsoft</span>
@@ -87,7 +92,7 @@ function App() {
           </section>
           <div className="login-divider" />
           <section className="login-users" aria-label="Choose a profile">
-            <button className="profile-button" onClick={() => setLoggedIn(true)} aria-label="Enter Pearl's portfolio">
+            <button className="profile-button" onClick={() => setLoggedIn(true)} aria-label="Enter Pearl's world">
               <span className="profile-avatar"><img src={frogAvatar} alt="" /></span>
               <span className="profile-name">Pearl</span>
               <span className="profile-arrow" aria-hidden="true">➜</span>
@@ -100,9 +105,9 @@ function App() {
   );
 
   return (
-    <main className="xp-desktop" aria-label="Pearl's portfolio desktop">
+    <main className="xp-desktop" aria-label="Pearl's world desktop">
       <div className="desktop-wallpaper" aria-hidden="true" />
-      <nav className="desktop-icons" aria-label="Portfolio folders">
+      <nav className="desktop-icons" aria-label="Desktop folders">
         {Object.entries(sections).map(([key, name]) => (
           <button className="desktop-icon" key={key} onClick={() => openWindow(key)}>
             <DesktopIcon kind={iconKinds[key]} />
@@ -111,25 +116,26 @@ function App() {
         ))}
       </nav>
 
-      {activeWindow && <section className={`xp-window ${maximized ? 'maximized' : ''} ${activeWindow === 'minesweeper' ? 'minesweeper-window' : ''} ${activeWindow === 'about' ? 'myspace-window' : ''} ${activeWindow === 'photos' ? 'photos-window' : ''}`} style={minimized ? { display: 'none' } : undefined} aria-labelledby="window-title">
+      {activeWindow && <section className={`xp-window ${maximized ? 'maximized' : ''} ${activeWindow === 'minesweeper' ? 'minesweeper-window' : ''} ${activeWindow === 'about' ? 'myspace-window' : ''} ${activeWindow === 'photos' ? 'photos-window' : ''} ${activeWindow === 'resume' ? 'resume-window' : ''}`} style={{ ...(minimized ? { display: 'none' } : {}), '--mine-window-width': `${Math.max(354, DIFFICULTIES[mineDifficulty].columns * 28 + 54)}px` }} aria-labelledby="window-title">
         <header className="window-titlebar">
-          <div className="window-title"><DesktopIcon kind={iconKinds[activeWindow]} /><h1 id="window-title">{activeWindow === 'minesweeper' ? 'Minesweeper' : activeWindow === 'about' ? 'Pearl’s Facespace — Microsoft Internet Explorer' : `${sections[activeWindow]} — Pearl's portfolio`}</h1></div>
+          <div className="window-title"><DesktopIcon kind={iconKinds[activeWindow]} /><h1 id="window-title">{activeWindow === 'minesweeper' ? 'Minesweeper' : activeWindow === 'resume' ? 'Resume.xls — Microsoft Excel' : activeWindow === 'about' ? 'Pearl’s Facespace — Microsoft Internet Explorer' : `${sections[activeWindow]} — Pearl's world`}</h1></div>
           <div className="window-controls">
             <button aria-label="Minimize window" onClick={() => setMinimized(true)}>_</button>
             <button aria-label={maximized ? 'Restore window' : 'Maximize window'} onClick={() => setMaximized(!maximized)}>□</button>
             <button className="close-window" aria-label="Close window" onClick={() => setActiveWindow(null)}>×</button>
           </div>
         </header>
-        {activeWindow !== 'minesweeper' && <><div className="window-menubar"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
+        {activeWindow !== 'minesweeper' && activeWindow !== 'resume' && <><div className="window-menubar"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
         <div className="window-address"><span>Address</span><div><DesktopIcon kind={activeWindow === 'about' ? 'internet' : 'folder'} /><span>{activeWindow === 'about' ? 'http://www.facespace.com/pearl' : `C:\\Pearl\\${sections[activeWindow]}`}</span></div><span className="address-go">➜ Go</span></div></>}
         <div className="window-content">
-          {activeWindow === 'home' && <div className="desktop-home"><span className="welcome-label">Welcome to my desktop</span><h2>Hi, I'm Pearl.</h2><p>Make yourself at home.</p><div className="home-shortcuts"><button onClick={() => openWindow('about')}><DesktopIcon kind="internet" /><span>About Me</span></button><button onClick={() => openWindow('contact')}><DesktopIcon kind="contact" /><span>Contact</span></button></div></div>}
+          {activeWindow === 'home' && <div className="desktop-home"><span className="welcome-label">Welcome to my desktop</span><h2>Hello World, I'm Pearl</h2><p>Make yourself at home.</p><div className="home-shortcuts"><button onClick={() => openWindow('about')}><DesktopIcon kind="internet" /><span>About Me</span></button><button onClick={() => openWindow('contact')}><DesktopIcon kind="contact" /><span>Contact</span></button><button onClick={() => openWindow('minesweeper')}><DesktopIcon kind="minesweeper" /><span>Minesweeper</span></button><button onClick={() => openWindow('photos')}><DesktopIcon kind="photos" /><span>Photos</span></button><button onClick={() => openWindow('resume')}><DesktopIcon kind="resume" /><span>Resume.xls</span></button></div></div>}
           {activeWindow === 'about' && <MyspaceProfile onNavigate={openWindow} />}
           {activeWindow === 'contact' && <Contact />}
           {activeWindow === 'photos' && <Photos />}
-          {activeWindow === 'minesweeper' && <Minesweeper />}
+          {activeWindow === 'resume' && <Resume unlocked={resumeUnlocked} onUnlock={() => setResumeUnlocked(true)} onCancel={() => setActiveWindow(null)} />}
+          {activeWindow === 'minesweeper' && <Minesweeper difficulty={mineDifficulty} onDifficultyChange={setMineDifficulty} />}
         </div>
-        <footer className="window-status">{activeWindow === 'minesweeper' ? 'Beginner · 10 mines' : activeWindow === 'photos' ? '4 photos' : activeWindow === 'about' ? 'Done' : activeWindow === 'home' ? '2 objects' : '1 object'}<span>{activeWindow === 'about' ? 'Internet' : 'My Computer'}</span></footer>
+        <footer className="window-status">{activeWindow === 'minesweeper' ? `${DIFFICULTIES[mineDifficulty].label} · ${DIFFICULTIES[mineDifficulty].mines} mines` : activeWindow === 'resume' ? 'Ready' : activeWindow === 'photos' ? '4 photos' : activeWindow === 'about' ? 'Done' : activeWindow === 'home' ? '5 objects' : '1 object'}<span>{activeWindow === 'about' ? 'Internet' : 'My Computer'}</span></footer>
       </section>}
 
       {startOpen && <nav className="start-menu" aria-label="Start menu"><header><span className="start-avatar"><img src={frogAvatar} alt="" /></span>Pearl</header><div className="start-menu-items">{Object.entries(sections).map(([key,name])=><button key={key} onClick={()=>openWindow(key)}><DesktopIcon kind={iconKinds[key]} />{name}</button>)}</div><footer><button onClick={logOff}><span aria-hidden="true">↪</span> Log Off</button></footer></nav>}
