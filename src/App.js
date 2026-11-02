@@ -131,7 +131,7 @@ function App() {
           {activeWindow === 'home' && <div className="desktop-home"><span className="welcome-label">Welcome to my desktop</span><h2>Hello World, I'm Pearl</h2><p>Make yourself at home.</p><div className="home-shortcuts"><button onClick={() => openWindow('about')}><DesktopIcon kind="internet" /><span>About Me</span></button><button onClick={() => openWindow('contact')}><DesktopIcon kind="contact" /><span>Contact</span></button><button onClick={() => openWindow('minesweeper')}><DesktopIcon kind="minesweeper" /><span>Minesweeper</span></button><button onClick={() => openWindow('photos')}><DesktopIcon kind="photos" /><span>Photos</span></button><button onClick={() => openWindow('resume')}><DesktopIcon kind="resume" /><span>Resume.xls</span></button></div></div>}
           {activeWindow === 'about' && <MyspaceProfile onNavigate={openWindow} />}
           {activeWindow === 'contact' && <Contact />}
-          {activeWindow === 'photos' && <Photos />}
+          {activeWindow === 'photos' && <Photos keyboardActive={!minimized && !startOpen} />}
           {activeWindow === 'resume' && <Resume unlocked={resumeUnlocked} onUnlock={() => setResumeUnlocked(true)} onCancel={() => setActiveWindow(null)} />}
           {activeWindow === 'minesweeper' && <Minesweeper difficulty={mineDifficulty} onDifficultyChange={setMineDifficulty} />}
         </div>
