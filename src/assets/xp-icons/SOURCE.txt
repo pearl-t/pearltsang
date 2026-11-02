@@ -1,0 +1,6 @@
+Windows XP High Resolution Icon Pack 2 by marchmountain
+https://github.com/marchmountain/-Windows-XP-High-Resolution-Icon-Pack
+Release: https://github.com/marchmountain/-Windows-XP-High-Resolution-Icon-Pack/releases/tag/02
+Unmodified PNG assets extracted from the author's release archive.
+The author releases their recreations under CC0; see LICENSE.txt.
+Windows and Internet Explorer are Microsoft trademarks.

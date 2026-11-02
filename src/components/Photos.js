@@ -1,0 +1,38 @@
+import { useState } from 'react';
+import cat01 from '../assets/cats/cat-01.jpg';
+import cat02 from '../assets/cats/cat-02.jpg';
+import cat03 from '../assets/cats/cat-03.jpg';
+import cat04 from '../assets/cats/cat-04.jpg';
+import './Photos.css';
+
+const photos = [cat01, cat02, cat03, cat04];
+
+export default function Photos() {
+  const [selected, setSelected] = useState(0);
+  function move(direction) {
+    setSelected(current => (current + direction + photos.length) % photos.length);
+  }
+  return (
+    <section className="cat-gallery" aria-label="Cat photo gallery" onKeyDown={event => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        move(event.key === 'ArrowLeft' ? -1 : 1);
+      }
+    }}>
+      <div className="photo-heading"><h2>My cats</h2><span>My Pictures</span></div>
+      <div className="photo-preview"><img src={photos[selected]} alt={`Pearl’s cats — ${selected + 1} of ${photos.length}`} /></div>
+      <div className="photo-controls">
+        <button type="button" onClick={() => move(-1)} aria-label="Previous photo">◀</button>
+        <span aria-live="polite">Photo {selected + 1} of {photos.length}</span>
+        <button type="button" onClick={() => move(1)} aria-label="Next photo">▶</button>
+      </div>
+      <div className="photo-filmstrip" aria-label="Choose a cat photo">
+        {photos.map((src, index) => (
+          <button type="button" key={src} aria-label={`View cat photo ${index + 1}`} aria-pressed={selected === index} onClick={() => setSelected(index)}>
+            <img src={src} alt="" /><span>Cat {String(index + 1).padStart(2, '0')}.jpg</span>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}

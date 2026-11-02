@@ -1,0 +1,17 @@
+.xp-window.photos-window:not(.maximized){width:min(790px,calc(100% - 150px));height:min(620px,calc(100dvh - 85px))}
+.photos-window .window-content{padding:0;display:flex;background:#ece9d8}
+.cat-gallery{display:flex;flex-direction:column;min-height:0;width:100%;padding:12px;gap:9px}
+.photo-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#527297;flex-shrink:0}
+.photo-heading h2{font-size:18px;font-weight:400;color:#21458c;margin:0}
+.photo-heading>span{font-size:11px}
+.photo-preview{min-height:120px;flex:1;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #a6a6a6;box-shadow:inset 1px 1px 2px #00000015;overflow:hidden}
+.photo-preview img{width:100%;height:100%;min-height:0;object-fit:contain}
+.photo-controls{display:flex;align-items:center;justify-content:center;gap:18px;flex-shrink:0;font-size:11px}
+.photo-controls button{border:1px solid #7f9db9;border-radius:3px;background:linear-gradient(#fff,#e2e7ec);color:#23549d;width:30px;height:25px;box-shadow:inset 1px 1px white}
+.photo-controls button:hover{background:#dcecff;border-color:#2167c5}
+.photo-filmstrip{display:flex;justify-content:center;gap:10px;flex-shrink:0;padding:7px 4px;background:#fff;border:1px solid #aca899}
+.photo-filmstrip button{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;width:100px;padding:5px;border:1px solid transparent;background:none;color:#222;font-size:10px}
+.photo-filmstrip img{display:block;width:100%;height:58px;object-fit:contain;background:#f4f4f4;border:1px solid #c9c9c9}
+.photo-filmstrip button:hover{background:#eaf2ff;border-color:#b9d3f6}
+.photo-filmstrip button[aria-pressed=true]{background:#dceaff;border-color:#316ac5;color:#153b79}
+@media(max-width:640px){.xp-window.photos-window:not(.maximized){width:calc(100% - 98px);height:calc(100dvh - 120px)}.cat-gallery{padding:8px;gap:8px}.photo-heading>span{display:none}.photo-filmstrip{gap:3px;padding:5px 2px}.photo-filmstrip button{padding:3px;gap:3px}.photo-filmstrip img{height:42px}.photo-filmstrip span{font-size:8px}.photo-heading h2{font-size:16px}}

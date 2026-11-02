@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import portrait from './assets/pearl-portrait.jpg';
+import computerIcon from './assets/xp-icons/computer.png';
+import internetIcon from './assets/xp-icons/internet-explorer.png';
+import contactIcon from './assets/xp-icons/email.png';
+import folderIcon from './assets/xp-icons/folder.png';
+import minesweeperIcon from './assets/xp-icons/minesweeper.png';
+import photosIcon from './assets/xp-icons/photos.png';
+import Photos from './components/Photos';
+import frogAvatar from './assets/xp-frog.png';
 import Contact from './components/Contact';
+import Minesweeper from './components/MinesweeperGame';
+import MyspaceProfile from './components/MyspaceProfile';
 
 function WindowsMark({ className = '' }) {
   return (
@@ -22,16 +31,19 @@ function WindowsMark({ className = '' }) {
   );
 }
 
+const desktopIconImages = { computer: computerIcon, internet: internetIcon, contact: contactIcon, folder: folderIcon, minesweeper: minesweeperIcon, photos: photosIcon };
+
 function DesktopIcon({ kind = 'folder' }) {
-  if (kind === 'computer') return (
-    <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#c9d7e5" stroke="#30436a" d="M7 3h32v27H7z" /><path fill="#167ed6" stroke="#fff" d="M11 7h24v18H11z" /><path fill="#87caef" d="m12 8 22 0-22 16z" /><path fill="#b7bfd1" stroke="#30436a" d="M19 30h10v5H19zM5 36h38v8H5z" /><path stroke="#fff" d="M8 38h31" /><path fill="#45a744" d="M35 39h4v2h-4z" /></svg>
-  );
   return (
-    <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#eaa22c" stroke="#ad791e" d="M3 10h17l4 5h20v27H3z" /><path fill="#ffe394" stroke="#b58a37" d="M3 17h42l-5 25H3z" /><path fill="#fff0be" d="M4 18h39l-1 3H4z" />{kind === 'contact' && <><path fill="#fff" stroke="#7386a7" d="M19 25h23v14H19z" /><path fill="none" stroke="#7386a7" d="m19 25 11.5 8L42 25" /></>}</svg>
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <image href={desktopIconImages[kind] || folderIcon} width="48" height="48" />
+    </svg>
   );
 }
 
-const sections = { home: 'Home', about: 'About Me', contact: 'Contact' };
+const iconKinds = { home: 'computer', about: 'internet', contact: 'contact', minesweeper: 'minesweeper', photos: 'photos' };
+
+const sections = { home: 'Home', about: 'About Me', contact: 'Contact', minesweeper: 'Minesweeper', photos: 'Photos' };
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -76,50 +88,52 @@ function App() {
           <div className="login-divider" />
           <section className="login-users" aria-label="Choose a profile">
             <button className="profile-button" onClick={() => setLoggedIn(true)} aria-label="Enter Pearl's portfolio">
-              <span className="profile-avatar"><img src={portrait} alt="" /></span>
+              <span className="profile-avatar"><img src={frogAvatar} alt="" /></span>
               <span className="profile-name">Pearl</span>
               <span className="profile-arrow" aria-hidden="true">➜</span>
             </button>
           </section>
         </div>
       </div>
-      <footer className="login-bottom"><span className="login-hint">A little nostalgia. A little about me.</span><span className="login-caption">Pearl's portfolio</span></footer>
+      <div className="login-bottom" aria-hidden="true" />
     </main>
   );
 
   return (
     <main className="xp-desktop" aria-label="Pearl's portfolio desktop">
-      <div className="desktop-wallpaper" aria-hidden="true"><div className="cloud cloud-one" /><div className="cloud cloud-two" /><div className="hill hill-back" /><div className="hill hill-front" /></div>
+      <div className="desktop-wallpaper" aria-hidden="true" />
       <nav className="desktop-icons" aria-label="Portfolio folders">
         {Object.entries(sections).map(([key, name]) => (
           <button className="desktop-icon" key={key} onClick={() => openWindow(key)}>
-            <DesktopIcon kind={key === 'home' ? 'computer' : key === 'contact' ? 'contact' : 'folder'} />
+            <DesktopIcon kind={iconKinds[key]} />
             <span>{name}</span>
           </button>
         ))}
       </nav>
 
-      {activeWindow && !minimized && <section className={`xp-window ${maximized ? 'maximized' : ''}`} aria-labelledby="window-title">
+      {activeWindow && <section className={`xp-window ${maximized ? 'maximized' : ''} ${activeWindow === 'minesweeper' ? 'minesweeper-window' : ''} ${activeWindow === 'about' ? 'myspace-window' : ''} ${activeWindow === 'photos' ? 'photos-window' : ''}`} style={minimized ? { display: 'none' } : undefined} aria-labelledby="window-title">
         <header className="window-titlebar">
-          <div className="window-title"><DesktopIcon kind={activeWindow === 'home' ? 'computer' : 'folder'} /><h1 id="window-title">{sections[activeWindow]} — Pearl's portfolio</h1></div>
+          <div className="window-title"><DesktopIcon kind={iconKinds[activeWindow]} /><h1 id="window-title">{activeWindow === 'minesweeper' ? 'Minesweeper' : activeWindow === 'about' ? 'Pearl’s Facespace — Microsoft Internet Explorer' : `${sections[activeWindow]} — Pearl's portfolio`}</h1></div>
           <div className="window-controls">
             <button aria-label="Minimize window" onClick={() => setMinimized(true)}>_</button>
             <button aria-label={maximized ? 'Restore window' : 'Maximize window'} onClick={() => setMaximized(!maximized)}>□</button>
             <button className="close-window" aria-label="Close window" onClick={() => setActiveWindow(null)}>×</button>
           </div>
         </header>
-        <div className="window-menubar"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
-        <div className="window-address"><span>Address</span><div><DesktopIcon kind="folder" /><span>C:\Pearl\{sections[activeWindow]}</span></div><span className="address-go">➜ Go</span></div>
+        {activeWindow !== 'minesweeper' && <><div className="window-menubar"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
+        <div className="window-address"><span>Address</span><div><DesktopIcon kind={activeWindow === 'about' ? 'internet' : 'folder'} /><span>{activeWindow === 'about' ? 'http://www.facespace.com/pearl' : `C:\\Pearl\\${sections[activeWindow]}`}</span></div><span className="address-go">➜ Go</span></div></>}
         <div className="window-content">
-          {activeWindow === 'home' && <div className="desktop-home"><span className="welcome-label">Welcome to my desktop</span><h2>Hi, I'm Pearl.</h2><p>Make yourself at home.</p><div className="home-shortcuts"><button onClick={() => openWindow('about')}><DesktopIcon /><span>About Me</span></button><button onClick={() => openWindow('contact')}><DesktopIcon kind="contact" /><span>Contact</span></button></div></div>}
-          {activeWindow === 'about' && <div className="desktop-about"><h2>About Me</h2><p>This folder is a work in progress.</p></div>}
+          {activeWindow === 'home' && <div className="desktop-home"><span className="welcome-label">Welcome to my desktop</span><h2>Hi, I'm Pearl.</h2><p>Make yourself at home.</p><div className="home-shortcuts"><button onClick={() => openWindow('about')}><DesktopIcon kind="internet" /><span>About Me</span></button><button onClick={() => openWindow('contact')}><DesktopIcon kind="contact" /><span>Contact</span></button></div></div>}
+          {activeWindow === 'about' && <MyspaceProfile onNavigate={openWindow} />}
           {activeWindow === 'contact' && <Contact />}
+          {activeWindow === 'photos' && <Photos />}
+          {activeWindow === 'minesweeper' && <Minesweeper />}
         </div>
-        <footer className="window-status">{activeWindow === 'home' ? '2 objects' : '1 object'}<span>My Computer</span></footer>
+        <footer className="window-status">{activeWindow === 'minesweeper' ? 'Beginner · 10 mines' : activeWindow === 'photos' ? '4 photos' : activeWindow === 'about' ? 'Done' : activeWindow === 'home' ? '2 objects' : '1 object'}<span>{activeWindow === 'about' ? 'Internet' : 'My Computer'}</span></footer>
       </section>}
 
-      {startOpen && <nav className="start-menu" aria-label="Start menu"><header><span className="start-avatar"><img src={portrait} alt="" /></span>Pearl</header><div className="start-menu-items">{Object.entries(sections).map(([key,name])=><button key={key} onClick={()=>openWindow(key)}><DesktopIcon kind={key==='home'?'computer':key==='contact'?'contact':'folder'} />{name}</button>)}</div><footer><button onClick={logOff}><span aria-hidden="true">↪</span> Log Off</button></footer></nav>}
-      <footer className="taskbar"><button className={`start-button ${startOpen ? 'pressed' : ''}`} aria-expanded={startOpen} onClick={() => setStartOpen(!startOpen)}><WindowsMark />start</button><div className="taskbar-tasks">{activeWindow && <button className={!minimized ? 'selected' : ''} onClick={() => setMinimized(!minimized)}><DesktopIcon kind={activeWindow==='home'?'computer':'folder'} />{sections[activeWindow]}</button>}</div><div className="system-tray"><span aria-hidden="true">♪</span><time>{time.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})}</time></div></footer>
+      {startOpen && <nav className="start-menu" aria-label="Start menu"><header><span className="start-avatar"><img src={frogAvatar} alt="" /></span>Pearl</header><div className="start-menu-items">{Object.entries(sections).map(([key,name])=><button key={key} onClick={()=>openWindow(key)}><DesktopIcon kind={iconKinds[key]} />{name}</button>)}</div><footer><button onClick={logOff}><span aria-hidden="true">↪</span> Log Off</button></footer></nav>}
+      <footer className="taskbar"><button className={`start-button ${startOpen ? 'pressed' : ''}`} aria-expanded={startOpen} onClick={() => setStartOpen(!startOpen)}><WindowsMark />start</button><div className="taskbar-tasks">{activeWindow && <button className={!minimized ? 'selected' : ''} onClick={() => setMinimized(!minimized)}><DesktopIcon kind={iconKinds[activeWindow]} />{sections[activeWindow]}</button>}</div><div className="system-tray"><span aria-hidden="true">♪</span><time>{time.toLocaleTimeString('en-US', {hour:'numeric',minute:'2-digit',timeZone:'America/Los_Angeles'})}</time></div></footer>
     </main>
   );
 }

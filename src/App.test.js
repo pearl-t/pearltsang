@@ -1,8 +1,23 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('profile opens the desktop and Minesweeper survives minimization', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: "Enter Pearl's portfolio" }));
+  fireEvent.click(within(screen.getByRole('navigation', { name: 'Portfolio folders' })).getByRole('button', { name: 'Minesweeper' }));
+  const board = screen.getByRole('group', { name: /Minesweeper board/ });
+  expect(within(board).getAllByRole('button')).toHaveLength(81);
+  const firstCell = within(board).getAllByRole('button')[0];
+  fireEvent.contextMenu(firstCell);
+  expect(firstCell).toHaveAccessibleName(/flagged/);
+  expect(screen.getByLabelText('Mines remaining')).toHaveTextContent('009');
+  fireEvent.click(screen.getByRole('button', { name: 'Minimize window' }));
+  expect(board).not.toBeVisible();
+  fireEvent.click(screen.getAllByRole('button', { name: 'Minesweeper' })[1]);
+  expect(board).toBeVisible();
+  expect(firstCell).toHaveAccessibleName(/flagged/);
+  fireEvent.click(screen.getByRole('button', { name: 'Start a new Minesweeper game' }));
+  expect(screen.getByLabelText('Mines remaining')).toHaveTextContent('010');
+  fireEvent.click(within(board).getAllByRole('button')[40]);
+  expect(screen.getByText('Good luck!')).toBeInTheDocument();
 });
