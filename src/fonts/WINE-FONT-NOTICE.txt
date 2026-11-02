@@ -1,0 +1,12 @@
+Wine Tahoma Regular and Wine Tahoma Bold
+Copyright (C) 2004 Larry Snyder.
+Based on Bitstream Vera Sans, Copyright (C) Bitstream Inc.
+Distributed with Wine under the GNU Lesser General Public License 2.1 or later.
+See WINE-FONT-LICENSE.txt for the license text.
+
+Unmodified font binaries and corresponding source:
+https://github.com/wine-mirror/wine/tree/wine-1.8/fonts
+https://raw.githubusercontent.com/wine-mirror/wine/wine-1.8/fonts/tahoma.sfd
+https://raw.githubusercontent.com/wine-mirror/wine/wine-1.8/fonts/tahomabd.sfd
+
+The site prefers an installed Tahoma font and uses these bundled fonts as a fallback.
