@@ -4,3 +4,5 @@
 .myspace-friends{margin-top:20px}.myspace-friends h3{color:#c60;background:#fc9}.myspace-friends>p{margin:10px 7px;font-size:11px}.myspace-friends>p strong{color:#c30}.myspace-friends-grid{display:flex;flex-wrap:wrap;gap:18px;padding:0 7px 6px}.myspace-friends-grid>div{display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:none;padding:0;color:#039;font:bold 11px Arial,Helvetica,sans-serif}.myspace-friends-grid img{width:100px;height:100px;object-fit:cover;border:1px solid #039}
 
 .myspace-contact a.profile-linkedin{display:flex;align-items:center;gap:6px;grid-column:1/-1}.profile-linkedin svg{width:15px;height:15px;flex-shrink:0}
+
+.myspace-profile .myspace-mood{display:flex;align-items:center;gap:4px;margin:-7px 0 17px;font:11px/1.4 Arial,Helvetica,sans-serif;color:#333}.myspace-mood svg{width:15px;height:15px;flex-shrink:0;margin-left:1px}

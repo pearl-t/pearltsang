@@ -2,12 +2,12 @@ import { useState } from 'react';
 import './Resume.css';
 
 const sheet = {
-  headings: ['Company', 'Title', 'Years'],
+  headings: ['Company', 'Title', 'Dates'],
   rows: [
-    ['Attentive', 'Software Engineer, Data', 'Apr 2024 - Present'],
+    ['Attentive', 'Software Engineer', 'Apr 2024 - Present'],
     ['Loup.ai', 'Software Engineer', 'Oct 2021 - Nov 2023'],
     ['Twitch', 'Data Engineer', 'Jan 2020 - Oct 2021'],
-    ['Wish', 'Data Engineer', 'Jun 2018 - Nov 2019'],
+    ['Wish', 'Analytics Engineer', 'Jun 2018 - Nov 2019'],
   ],
 };
 
