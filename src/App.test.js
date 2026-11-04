@@ -41,3 +41,20 @@ test('auto-enters after ten seconds but stays on login after logging off', () =>
     jest.useRealTimers();
   }
 });
+
+test('a delivered note remains visible after closing and reopening Contact', () => {
+  sessionStorage.setItem('pearls-world-sent-note', JSON.stringify({ name: 'Visitor', message: 'A saved hello' }));
+  try {
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: "Enter Pearl's world" }));
+    const openContact = () => fireEvent.click(within(screen.getByRole('navigation', { name: 'Desktop folders' })).getByRole('button', { name: 'Contact' }));
+    openContact();
+    expect(screen.getByLabelText('Note')).toHaveValue('Thanks for the note! Your message has been sent to pearl.');
+    fireEvent.click(screen.getByRole('button', { name: 'Close window' }));
+    openContact();
+    expect(screen.getByText('A saved hello', { exact: false })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send' })).toBeDisabled();
+  } finally {
+    sessionStorage.removeItem('pearls-world-sent-note');
+  }
+});

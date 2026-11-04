@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import computerIcon from './assets/xp-icons/computer.png';
 import internetIcon from './assets/xp-icons/internet-explorer.png';
-import contactIcon from './assets/xp-icons/email.png';
+import contactIcon from './assets/aim-icon.webp';
 import folderIcon from './assets/xp-icons/folder.png';
 import minesweeperIcon from './assets/xp-icons/minesweeper.png';
 import photosIcon from './assets/xp-icons/photos.png';
@@ -53,6 +53,16 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [autoEnter, setAutoEnter] = useState(true);
   const [resumeUnlocked, setResumeUnlocked] = useState(false);
+  const [sentNote, setSentNote] = useState(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('pearls-world-sent-note'));
+      return saved && typeof saved.name === 'string' && typeof saved.message === 'string' ? saved : null;
+    } catch { return null; }
+  });
+  function rememberSentNote(note) {
+    setSentNote(note);
+    try { sessionStorage.setItem('pearls-world-sent-note', JSON.stringify(note)); } catch { /* Keep the message in memory if storage is unavailable. */ }
+  }
   const [mineDifficulty, setMineDifficulty] = useState('beginner');
   const [activeWindow, setActiveWindow] = useState('home');
   const [minimized, setMinimized] = useState(false);
@@ -125,26 +135,26 @@ function App() {
         ))}
       </nav>
 
-      {activeWindow && <section className={`xp-window ${maximized ? 'maximized' : ''} ${activeWindow === 'minesweeper' ? 'minesweeper-window' : ''} ${activeWindow === 'about' ? 'myspace-window' : ''} ${activeWindow === 'photos' ? 'photos-window' : ''} ${activeWindow === 'resume' ? 'resume-window' : ''}`} style={{ ...(minimized ? { display: 'none' } : {}), '--mine-window-width': `${Math.max(354, DIFFICULTIES[mineDifficulty].columns * 28 + 54)}px` }} aria-labelledby="window-title">
+      {activeWindow && <section className={`xp-window ${maximized ? 'maximized' : ''} ${activeWindow === 'minesweeper' ? 'minesweeper-window' : ''} ${activeWindow === 'about' ? 'myspace-window' : ''} ${activeWindow === 'photos' ? 'photos-window' : ''} ${activeWindow === 'resume' ? 'resume-window' : ''} ${activeWindow === 'contact' ? 'aim-window' : ''}`} style={{ ...(minimized ? { display: 'none' } : {}), '--mine-window-width': `${Math.max(354, DIFFICULTIES[mineDifficulty].columns * 28 + 54)}px` }} aria-labelledby="window-title">
         <header className="window-titlebar">
-          <div className="window-title"><DesktopIcon kind={iconKinds[activeWindow]} /><h1 id="window-title">{activeWindow === 'minesweeper' ? 'Minesweeper' : activeWindow === 'resume' ? 'Resume.xls — Microsoft Excel' : activeWindow === 'about' ? 'Pearl’s Facespace — Microsoft Internet Explorer' : `${sections[activeWindow]} — Pearl's world`}</h1></div>
+          <div className="window-title"><DesktopIcon kind={iconKinds[activeWindow]} /><h1 id="window-title">{activeWindow === 'minesweeper' ? 'Minesweeper' : activeWindow === 'contact' ? 'pearl — Instant Message' : activeWindow === 'resume' ? 'Resume.xls — Microsoft Excel' : activeWindow === 'about' ? 'Pearl’s Facespace — Microsoft Internet Explorer' : `${sections[activeWindow]} — Pearl's world`}</h1></div>
           <div className="window-controls">
             <button aria-label="Minimize window" onClick={() => setMinimized(true)}>_</button>
             <button aria-label={maximized ? 'Restore window' : 'Maximize window'} onClick={() => setMaximized(!maximized)}>□</button>
             <button className="close-window" aria-label="Close window" onClick={() => setActiveWindow(null)}>×</button>
           </div>
         </header>
-        {activeWindow !== 'minesweeper' && activeWindow !== 'resume' && <><div className="window-menubar"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
+        {activeWindow !== 'minesweeper' && activeWindow !== 'resume' && activeWindow !== 'contact' && <><div className="window-menubar"><span>File</span><span>Edit</span><span>View</span><span>Favorites</span><span>Tools</span><span>Help</span></div>
         <div className="window-address"><span>Address</span><div><DesktopIcon kind={activeWindow === 'about' ? 'internet' : 'folder'} /><span>{activeWindow === 'about' ? 'http://www.facespace.com/pearl' : `C:\\Pearl\\${sections[activeWindow]}`}</span></div><span className="address-go">➜ Go</span></div></>}
         <div className="window-content">
           {activeWindow === 'home' && <div className="desktop-home"><span className="welcome-label">Welcome to my desktop</span><h2>Hello World, I'm Pearl</h2><p>Make yourself at home.</p><div className="home-shortcuts"><button onClick={() => openWindow('about')}><DesktopIcon kind="internet" /><span>About Me</span></button><button onClick={() => openWindow('contact')}><DesktopIcon kind="contact" /><span>Contact</span></button><button onClick={() => openWindow('minesweeper')}><DesktopIcon kind="minesweeper" /><span>Minesweeper</span></button><button onClick={() => openWindow('photos')}><DesktopIcon kind="photos" /><span>Photos</span></button><button onClick={() => openWindow('resume')}><DesktopIcon kind="resume" /><span>Resume.xls</span></button></div></div>}
           {activeWindow === 'about' && <MyspaceProfile onNavigate={openWindow} />}
-          {activeWindow === 'contact' && <Contact />}
+          {activeWindow === 'contact' && <Contact deliveredMessage={sentNote} onDelivered={rememberSentNote} />}
           {activeWindow === 'photos' && <Photos keyboardActive={!minimized && !startOpen} />}
           {activeWindow === 'resume' && <Resume unlocked={resumeUnlocked} onUnlock={() => setResumeUnlocked(true)} onCancel={() => setActiveWindow(null)} />}
           {activeWindow === 'minesweeper' && <Minesweeper difficulty={mineDifficulty} onDifficultyChange={setMineDifficulty} />}
         </div>
-        <footer className="window-status">{activeWindow === 'minesweeper' ? `${DIFFICULTIES[mineDifficulty].label} · ${DIFFICULTIES[mineDifficulty].mines} mines` : activeWindow === 'resume' ? 'Ready' : activeWindow === 'photos' ? '4 photos' : activeWindow === 'about' ? 'Done' : activeWindow === 'home' ? '5 objects' : '1 object'}<span>{activeWindow === 'about' ? 'Internet' : 'My Computer'}</span></footer>
+        <footer className="window-status">{activeWindow === 'minesweeper' ? `${DIFFICULTIES[mineDifficulty].label} · ${DIFFICULTIES[mineDifficulty].mines} mines` : activeWindow === 'contact' ? 'Offline message' : activeWindow === 'resume' ? 'Ready' : activeWindow === 'photos' ? '4 photos' : activeWindow === 'about' ? 'Done' : activeWindow === 'home' ? '5 objects' : '1 object'}<span>{activeWindow === 'about' ? 'Internet' : 'My Computer'}</span></footer>
       </section>}
 
       {startOpen && <nav className="start-menu" aria-label="Start menu"><header><span className="start-avatar"><img src={frogAvatar} alt="" /></span>Pearl</header><div className="start-menu-items">{Object.entries(sections).map(([key,name])=><button key={key} onClick={()=>openWindow(key)}><DesktopIcon kind={iconKinds[key]} />{name}</button>)}</div><footer><button onClick={logOff}><span aria-hidden="true">↪</span> Log Off</button></footer></nav>}

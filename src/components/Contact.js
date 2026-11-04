@@ -1,16 +1,30 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
-import mailIcon from '../assets/xp-icons/email.png';
+import portrait from '../assets/pearl-portrait.jpg';
+import aimIcon from '../assets/aim-icon.webp';
 import './Contact.css';
 
-const Contact = () => {
+const Contact = ({ deliveredMessage = null, onDelivered }) => {
    const form = useRef();
-  const [formData, setFormData] = useState({
+  const [opening, setOpening] = useState(!deliveredMessage);
+  useEffect(() => {
+    if (deliveredMessage) return;
+    document.body.classList.add('aim-opening');
+    const timer = setTimeout(() => {
+      setOpening(false);
+      document.body.classList.remove('aim-opening');
+    }, 2000);
+    return () => {
+      clearTimeout(timer);
+      document.body.classList.remove('aim-opening');
+    };
+  }, [deliveredMessage]);
+  const [formData, setFormData] = useState(deliveredMessage || {
     name: '',
     message: '',
   });
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(Boolean(deliveredMessage));
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState(false);
   const sendingRef = useRef(false);
@@ -23,13 +37,14 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (sendingRef.current) return;
+    if (sendingRef.current || formSubmitted) return;
     sendingRef.current = true;
     setSending(true);
     setSendError(false);
     try {
       await emailjs.sendForm('service_21bdrd3', 'template_5zx5y3c', form.current, 'wNPhAuVnDlHX3F2tE');
       setFormSubmitted(true);
+      onDelivered?.({ ...formData });
     } catch {
       setSendError(true);
     } finally {
@@ -38,65 +53,39 @@ const Contact = () => {
     }
   };
 
+  if (opening) return (
+    <div className="aim-opening-screen" role="status">
+      <img src={aimIcon} alt="" />
+      <h2>AOL Instant Messenger</h2>
+      <p>Opening your message window…</p>
+      <div className="xp-mail-progress" aria-hidden="true"><div><span /><span /><span /></div></div>
+    </div>
+  );
+
   return (
-    <div className={`container App contact-view ${sending ? 'is-sending' : ''}`} aria-busy={sending}>
-        {sending && <div className="xp-mail-loading" role="status" aria-live="polite">
-          <div className="xp-mail-loading-title">Sending a little hello</div>
-          <div className="xp-mail-loading-body">
-            <div className="xp-mail-route" aria-hidden="true"><img src={mailIcon} alt="" /><span>· · · · ·</span><span className="xp-mail-destination">🦪</span></div>
-            <h2>Sending your note…</h2>
-            <p>A little message, on its way to Pearl.</p>
-            <div className="xp-mail-progress" aria-hidden="true"><div><span /><span /><span /></div></div>
-            <small>Please wait while your note travels through cyberspace.</small>
+    <div className={`contact-view aim-messenger ${sending ? 'is-sending' : ''}`} aria-busy={sending}>
+      <div className="aim-menubar"><div aria-hidden="true"><span>File</span><span>Edit</span><span>Insert</span><span>People</span></div><span className="aim-offline-status">pearl is offline</span></div>
+      <div className="aim-history-row">
+        <div className="aim-avatar-rail" aria-hidden="true"><img className="aim-pearl-avatar" src={portrait} alt="" /></div>
+        <div className="aim-conversation" aria-label="Conversation with pearl">
+          <p className="aim-away"><strong>pearl:</strong> hey i'm afk right now, just leave me a message (goes to my email) and i'll get back to you asap!</p>
+          {formSubmitted && <p className="aim-sent"><strong>{formData.name}:</strong> {formData.message}</p>}
+        </div>
+      </div>
+      <form ref={form} onSubmit={handleSubmit} className="aim-compose contact-form-content">
+        <label className="aim-name">Your name: <input type="text" name="name" aria-label="Name" required readOnly={sending || formSubmitted} value={formData.name} onChange={handleChange} placeholder="Your screen name" /></label>
+        <div className="aim-compose-row">
+          <div className="aim-avatar-rail aim-own-avatar" aria-hidden="true"><img src={aimIcon} alt="" /></div>
+          <div className="aim-editor">
+            <div className="aim-formatting" aria-hidden="true"><span className="aim-font-tools">ᴀ <b>▣</b> <small>ᴀ⌄</small> A <b>ᴬA</b></span><b>B</b><i>I</i><u>U</u><span className="aim-link-tool">link</span><span>✉</span><span>☺</span></div>
+            <textarea className={formSubmitted ? 'aim-confirmation' : undefined} name="message" aria-label="Note" required readOnly={sending || formSubmitted} value={formSubmitted ? 'Thanks for the note! Your message has been sent to pearl.' : formData.message} onChange={handleChange} placeholder="" rows="4" />
+            {formSubmitted && <span className="aim-sr-only" role="status">Your message has been sent to pearl.</span>}
           </div>
-        </div>}
-        <div className="max-w-md mx-auto mt-8 contact-form-content">
-        {!formSubmitted ? (
-            <>
-            <h1 className="text-3xl mt-3 font-bold mb-5" style={{ fontFamily: 'TheSeasonsBD' }}>
-                Drop a note!
-            </h1>
-            <form ref={form} onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        aria-label="Name"
-                        readOnly={sending}
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Name"
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-                    />
-                </div>
-                <div>
-                    <textarea
-                        id="message"
-                        name="message"
-                        aria-label="Note"
-                        readOnly={sending}
-                        required
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder="Note"
-                        rows="4"
-                        className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-                    ></textarea>
-                </div>
-                <div>
-                <button type="submit" disabled={sending}>{sending ? 'Sending…' : 'Submit'}</button>
-                </div>
-                {sendError && <p role="alert" style={{ color: '#a22518', margin: '6px 0', lineHeight: 1.5 }}>Your note couldn’t be sent. Your message is still here—please try again later, or contact me on <a href="https://www.linkedin.com/in/pearl-tsang" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>}
-            </form>
-            </>
-        ):(
-        <div>
-        <p>Thanks for the note!</p>
         </div>
-        )}
-        </div>
+        {sendError && <p role="alert" className="aim-send-error">Your note couldn’t be sent. Your message is still here—please try again later, or contact me on <a href="https://www.linkedin.com/in/pearl-tsang" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>}
+        <div className="aim-send-row"><div className="aim-bottom-tools" aria-hidden="true"><span><i>⚡</i>Warn</span><span><i>⊘</i>Block</span><span className="aim-tool-divider" /><span><i>🎨</i>Expressions</span><span><i>🎲</i>Games</span><span className="aim-tool-muted"><i>◉</i>Video</span><span className="aim-tool-muted"><i>♟</i>Talk</span></div><button type="submit" disabled={sending || formSubmitted}><span aria-hidden="true">✉</span>{sending ? 'Sending…' : 'Send'}</button></div>
+      </form>
+      <div className="aim-statusbar">pearl is offline<span>AIM</span></div>
     </div>
   );
 };
